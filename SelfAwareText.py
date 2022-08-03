@@ -21,6 +21,7 @@ class AppearObject(QGraphicsObject):
 		self.max_width = self.font_measure.width(self.content, Qt.AlignCenter)
 		self.lines = 1
 		self.line_height = self.font_measure.lineSpacing()
+		self.editor = None
 		
 	def toggle_visibility(self):
 		if self.show:
@@ -38,7 +39,15 @@ class AppearObject(QGraphicsObject):
 		elif type(font) == tuple:
 			return QFont(font)
 		else:
-			return self.parent().font()
+			try:
+				a = font()
+			except TypeError:
+				if self.parent():
+					return self.parent().font()
+				else:
+					return QFont('Arial', 12)
+			else:
+				return a
 			
 	def set_width(self, integer):
 		self.max_width = integer
